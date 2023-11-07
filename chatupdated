@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>D3 tutorial</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script> <!-- Updated D3.js library version -->
+</head>
+
+<body>
+
+    <script>
+        // CSV fields are "FacilityName","Rank","Readmits","Discharges","ReadmitPercent"
+        d3.csv("TestData.csv", function (data) {
+            // When we move to Sisense, you will need to connect to the API for values
+
+            var width = 1000;
+            var height = 25;
+            var canvas = d3
+                .select("body")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            // Use a gradient color scale from red to blue based on Rank values
+            var color = d3.scaleLinear()
+                .domain([1, 100]) // Adjust the domain based on your rank range
+                .range(["blue", "red"]);
+
+            canvas
+                .selectAll("circle") // Changed to "circle" for circles instead of rectangles
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", function (d) {
+                    return d.Rank * (width / 100); // Scale the Rank values to fit within the canvas
+                })
+                .attr("cy", height / 2) // Center the circles vertically
+                .attr("r", 5)
+                .attr("fill", function (d) {
+                    return color(d.Rank); // Use the color scale to set the fill color
+                });
+        });
+    </script>
+
+</body>
+
+</html>
